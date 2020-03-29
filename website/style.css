@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css?family=Baloo+2&display=swap');
+
+body {
+	overflow: hidden;
+	background-color: #222831;
+}
+
+#app {
+	display: flex;
+	height: 100vh;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	font-family: 'Baloo 2', cursive;
+}
+
+.holder {
+	font-size: 20px;
+}
+
+.headline h3 {
+	text-align: center;
+	font-size: 2rem;
+	margin-block-end: 0;
+}
+
+.headline h3 span {
+	color: #0077b5;
+}
+
+.container {
+	background-color: #1a1d24;
+	padding: 0 3rem;
+	color: #fff;
+	border-radius: 5px;
+}
+
+.zip {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	flex-direction: column;
+	margin-bottom: 0.5rem;
+}
+
+.zip label {
+	font-size: 1.3rem;
+	padding: 10px;
+	line-height: 30px;
+}
+
+.zip input {
+	width: 100%;
+	height: 30px;
+	border: 3px solid #0077b5;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+.zip textarea {
+	margin-bottom: 2rem;
+	width: 100%;
+	border: 3px solid #0077b5;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+.zip button {
+	height: auto;
+	width: 200px;
+	background-color: #222831;
+	border: none;
+	color: #1ca0f0;
+	padding: 10px;
+	font-size: 1rem;
+	font-weight: bold;
+	cursor: pointer;
+	border-radius: 5px;
+	margin-right: 2rem;
+}
+
+.btn-holder {
+	display: flex;
+}
+
+#entryHolder {
+	background-color: #fff;
+	min-width: 100%;
+	min-height: 70px;
+	margin-bottom: 2rem;
+	border-radius: 5px;
+	padding: 0 1rem;
+}
+
+#entryHolder span.value {
+	color: #1ca0f0;
+}
+
+/* Spinner styles */
+.spinner {
+	width: 2rem;
+	height: 2rem;
+	border: 3px solid rgba(0, 0, 0, .25);
+	border-top-color: rgba(255, 255, 255, .5);
+	border-radius: 50%;
+	animation: rotation .8s ease infinite;
+	display: none;
+}
+
+.show-spinner {
+	display: block;
+}
+
+#entryHolder-container h3 {
+	margin-block-end: 0;
+}
+
+#entryHolder span {
+	color: #000;
+	font-size: 1.3rem;
+}
+
+p.error {
+	color: red;
+}
+
+@keyframes rotation {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
