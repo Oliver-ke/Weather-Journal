@@ -1,41 +1,11 @@
-// api key for open waether api
-const API_KEY = 'f5b5b7f705288e343539d63ae18130a3';
+// loagin spinner element
 const spinner = document.querySelector('.spinner');
 
-// util function to make api calls
-const fetchData = async (url, payload = null, httpMethod = 'GET') => {
-	const reqConfig = {
-		method: httpMethod,
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	};
-	try {
-		if (payload) {
-			reqConfig.body = JSON.stringify(payload);
-			const res = await fetch(url, reqConfig);
-			const data = await res.json();
-			return data;
-		}
-		let res = await fetch(url, reqConfig);
-		let data = await res.json();
-		return data;
-	} catch (error) {
-		console.log(error);
-		document.querySelector('#error').innerHTML = `<p>Opps Error!</p>`;
-		spinner.classList.remove('show-spinner');
-	}
-};
-
-//  get users input
-const getInputs = () => {
-	const zip = document.querySelector('#zip').value;
-	const feelings = document.querySelector('#feelings').value;
-	return { zip, feelings };
-};
+// api key for open waether api
+const MY_APP_API_KEY = 'f5b5b7f705288e343539d63ae18130a3';
 
 // update ui
-const updateUi = (payload = null) => {
+const uiEngine = (payload = null) => {
 	if (!payload) {
 		document.querySelector('#date').innerHTML = '';
 		document.querySelector('#temp').innerHTML = '';
@@ -58,13 +28,46 @@ const updateUi = (payload = null) => {
   `;
 };
 
-const generateHandler = async () => {
-	const { zip, feelings } = getInputs();
+//  parse form input
+const receiveInput = () => {
+	const zip = document.querySelector('#zip').value;
+	const feelings = document.querySelector('#feelings').value;
+	return { zip, feelings };
+};
 
-	// clear existing content;
-	updateUi();
+// util function to make api calls
+const makeNetworkRequest = async (url, payload = null, method = 'GET') => {
+	const reqConfig = {
+		method: method,
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	};
+	try {
+		if (payload) {
+			reqConfig.body = JSON.stringify(payload);
+			const res = await fetch(url, reqConfig);
+			const data = await res.json();
+			return data;
+		}
+		let res = await fetch(url, reqConfig);
+		let data = await res.json();
+		return data;
+	} catch (error) {
+		console.log(error);
+		document.querySelector(
+			'#error'
+		).innerHTML = `<p>An error has occured!</p>`;
+		spinner.classList.remove('show-spinner');
+	}
+};
 
-	// if no input show error
+const getWeatherInfo = async () => {
+	// clear the current ui content
+	uiEngine();
+	const { zip, feelings } = receiveInput();
+
+	// validate input
 	if (zip === '' || feelings === '') {
 		return (document.querySelector(
 			'#error'
@@ -76,13 +79,13 @@ const generateHandler = async () => {
 	// clear any existing eror
 	document.querySelector('#error').innerHTML = ``;
 
-	// compose url, corsProxy is used due to cors error
-	const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-	const weatherbaseUrl = 'https://api.openweathermap.org/data/2.5/weather';
-	const weatherFullUrl = `${corsProxy}${weatherbaseUrl}?zip=${zip}&appid=${API_KEY}`;
+	// compose url, corsUrl is used due to cors error
+	const corsUrl = 'https://cors-anywhere.herokuapp.com/';
+	const baseUrl = 'https://api.openweathermap.org/data/2.5/weather';
+	const weatherFullUrl = `${corsUrl}${baseUrl}?zip=${zip}&appid=${MY_APP_API_KEY}`;
 
 	// use util function to fetch weather data
-	const weatherData = await fetchData(weatherFullUrl);
+	const weatherData = await makeNetworkRequest(weatherFullUrl);
 
 	// check data receive
 	if (weatherData && weatherData.main) {
@@ -94,18 +97,18 @@ const generateHandler = async () => {
 		};
 
 		// local server url
-		const localServerUrl = 'http://localhost:5000/data';
+		const localServerUrl = 'http://localhost:3000/data';
 
 		// post user data to local server
-		await fetchData(localServerUrl, userDetails, 'POST');
+		await makeNetworkRequest(localServerUrl, userDetails, 'POST');
 
 		// get user data
-		const serverRes = await fetchData(localServerUrl);
+		const serverRes = await makeNetworkRequest(localServerUrl);
 		// hide the spinner
 		spinner.classList.remove('show-spinner');
 
 		// update ui with data received
-		return updateUi(serverRes);
+		return uiEngine(serverRes);
 	}
 
 	// if no data, then an invalid zip code was entered
@@ -118,5 +121,5 @@ const generateHandler = async () => {
 };
 
 // on click handler
-const generateBtn = document.querySelector('#generate');
-generateBtn.addEventListener('click', generateHandler);
+const getWeatherBtn = document.querySelector('#generate');
+getWeatherBtn.addEventListener('click', getWeatherInfo);

@@ -34,11 +34,12 @@ app.post('/data', (req, res) => {
 	const { temperature, date, userResponse } = req.body;
 	const userPayload = { temperature, date, userResponse };
 	projectData = userPayload;
-	return res.status(201).json({ message: 'Item added', userResponse });
+	return res
+		.status(201)
+		.json({ message: 'Iteam has been added', userResponse });
 });
 
-// server port, use 5000 in dev and on production use environment port
-const PORT = 5000 || process.env.PORT;
+const PORT = 3000;
 
 // start server
 app.listen(PORT, () => {
